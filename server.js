@@ -1,7 +1,7 @@
 import express from 'express';
 const app = express();
 app.use(express.json());
-const students = [
+let students = [
     {
         id:1,
         name:"Mahak Kaushal",
@@ -54,6 +54,23 @@ app.post("/students",(req,res)=>{
 app.get('/allstudents',(req,res)=>{
     res.json(students);
 })
+
+app.delete('/students/:id',(req,res)=>{
+    const studentId = Number(req.params.id);
+    const student = students.find(student=>student.id===studentId);
+    if(!student){
+        return res.status(404).json({
+            message:"Student Not found"
+        });
+    }
+
+    students = students.filter(
+        student => student.id !== studentId
+    )
+    res.json({
+        message:"Student Deleted Successfully!!"
+    });
+});
 app.listen(5000,()=>{
     console.log("Server is running on port 5000");
 })
